@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+    <head>
+        <title>Page browser</title>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();
+        </script>
+    </head>
+    
+    <body>
+        <div id="container">
+            <img id="pageSnip">
+        </div>
+        <style>
+            #id{
+                position: absolute;
+                overflow-x: hidden;
+                overflow-y: hidden;
+                left: 0px;
+                top: 0px;
+            }
+            #pageSnip{
+                position: absolute;
+                overflow-x: hidden;
+                overflow-y: hidden;
+                left: 0px;
+                top: 0px;
+            }
+        </style>
+
+        <script>
+            socket.on("updateImage", () => {
+                document.getElementById("pageSnip").src = `/frame/${Date.now()}`;
+            });
+
+            document.addEventListener("mousemove", event => {
+                let data = {
+                    x: event.x,
+                    y: event.y
+                };
+                socket.emit("mousemove", data);
+            });
+
+            document.addEventListener("mousedown", event => {
+                socket.emit("mousedown");
+            });
+        </script>
+    </body>
+</html>
